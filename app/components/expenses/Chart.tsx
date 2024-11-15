@@ -1,6 +1,10 @@
 import ChartBar from './ChartBar';
 
-function Chart({ expenses }) {
+interface ChartProps {
+  expenses: { date: string; amount: number }[];
+}
+
+function Chart({ expenses }: ChartProps) {
   const chartDataPoints = [
     { label: 'Jan', value: 0 },
     { label: 'Feb', value: 0 },
@@ -27,7 +31,7 @@ function Chart({ expenses }) {
   return (
     <section>
       <h2>Monthly Expenses</h2>
-      <ol className='chart'>
+      <ol className="chart">
         {chartDataPoints.map((dataPoint) => (
           <ChartBar
             key={dataPoint.label}

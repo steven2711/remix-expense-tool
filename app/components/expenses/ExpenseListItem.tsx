@@ -1,6 +1,19 @@
-function ExpenseListItem({ title, amount }) {
-  function deleteExpenseItemHandler() {
-    // tbd
+import { Link, useFetcher } from '@remix-run/react';
+import { Expense } from '~/types/types';
+
+export default function ExpenseListItem({ id, title, amount }: Expense) {
+  const fetcher = useFetcher();
+
+  function deleteExpenseHandler() {
+    fetcher.submit(null, { method: 'delete', action: `/expenses/${id}` });
+  }
+
+  if (fetcher.state !== 'idle') {
+    return (
+      <article className="expense-item locked">
+        <p>Deleting...</p>
+      </article>
+    );
   }
 
   return (
@@ -10,11 +23,12 @@ function ExpenseListItem({ title, amount }) {
         <p className="expense-amount">${amount.toFixed(2)}</p>
       </div>
       <menu className="expense-actions">
-        <button onClick={deleteExpenseItemHandler}>Delete</button>
-        <a href="tbd">Edit</a>
+        <button onClick={deleteExpenseHandler}>Delete</button>
+        {/* <Form method="delete" action={`/expenses/${id}`}>
+          <button>Delete</button>
+        </Form> */}
+        <Link to={id}>Edit</Link>
       </menu>
     </article>
   );
 }
-
-export default ExpenseListItem;

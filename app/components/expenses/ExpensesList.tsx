@@ -1,7 +1,7 @@
 import ExpenseListItem from './ExpenseListItem';
+import { Expense } from '~/types/types';
 
-function ExpensesList({ expenses }) {
-
+export default function ExpensesList({ expenses }: { expenses: Expense[] }) {
   return (
     <ol id="expenses-list">
       {expenses.map((expense) => (
@@ -16,5 +16,3 @@ function ExpensesList({ expenses }) {
     </ol>
   );
 }
-
-export default ExpensesList;

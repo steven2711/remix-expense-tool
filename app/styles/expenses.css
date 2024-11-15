@@ -89,6 +89,8 @@
 
 #expense-form {
   padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 #expense-form .form-actions {

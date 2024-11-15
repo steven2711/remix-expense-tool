@@ -4,11 +4,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
+  Link,
+  useRouteError,
 } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
+import MainHeader from '~/components/navigation/MainHeader';
+import ExpensesHeader from './components/navigation/ExpensesHeader';
 
 // import './tailwind.css';
 import sharedStyles from '~/styles/shared.css?url';
+import Error from './components/util/Error';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -27,7 +33,15 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Document({
+  title,
+  children,
+  isExpensesRoute,
+}: {
+  title?: string;
+  children: React.ReactNode;
+  isExpensesRoute?: boolean;
+}) {
   return (
     <html lang="en">
       <head>
@@ -35,13 +49,62 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <title>{title}</title>
       </head>
       <body>
+        {isExpensesRoute ? <ExpensesHeader /> : <MainHeader />}
         {children}
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+  );
+}
+
+export function Layout({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
+  const location = useLocation();
+  const isExpensesRoute = location.pathname.startsWith('/expenses');
+
+  return (
+    <Document isExpensesRoute={isExpensesRoute} title={title}>
+      {children}
+    </Document>
+  );
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <main>
+      <Error title="An error occurred!">
+        <p>{error?.message || 'Something went wrong!'}</p>
+        <p>
+          Back to <Link to="/">safety!</Link>
+        </p>
+      </Error>
+    </main>
+  );
+}
+
+export function CatchBoundary() {
+  const caughtResponse = useRouteError() as {
+    statusText: string;
+    data?: { message: string };
+  };
+  return (
+    <main>
+      <Error title={caughtResponse.statusText}>
+        <p>{caughtResponse.data?.message || 'Something went wrong!'}</p>
+        <p>
+          Back to <Link to="/">safety!</Link>
+        </p>
+      </Error>
+    </main>
   );
 }
 
