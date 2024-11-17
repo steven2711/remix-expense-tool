@@ -21,8 +21,8 @@ function MainHeader() {
         <ul>
           <li>
             {userId ? (
-              <Form method="post" action="/logout" id="logout-form">
-                <button className="cta-alt">Logout</button>
+              <Form method="post" action="/logout">
+                <button className="cta">Logout</button>
               </Form>
             ) : (
               <Link to="/auth" className="cta">

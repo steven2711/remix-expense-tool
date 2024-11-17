@@ -20,7 +20,6 @@ export default function ExpensesLayout() {
   const expenses = useLoaderData<typeof loader>();
   const hasExpenses = expenses && expenses.length > 0;
   // on refresh this code runs via server and client. this is due to the server building this page then serveing to the client. but if I where to navigate away from this page and come back, the code will only run in the client.
-  // console.log('Expenses layout');
   return (
     <>
       <Outlet />
