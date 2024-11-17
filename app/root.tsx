@@ -82,15 +82,20 @@ export function Layout({
 
 export function ErrorBoundary() {
   const error = useRouteError() as Error;
+  console.error('App Error:', error);
+
   return (
-    <main>
-      <Error title="An error occurred!">
-        {error.message || 'Something went wrong!'}
-      </Error>
-      <p className="text-center">
-        Back to <Link to="/">safety!</Link>
-      </p>
-    </main>
+    <Document>
+      <main className="error">
+        <h1>An error occurred!</h1>
+        <p>
+          {error.message || 'Something went wrong. Please try again later.'}
+        </p>
+        <p>
+          Back to <Link to="/">safety</Link>
+        </p>
+      </main>
+    </Document>
   );
 }
 
