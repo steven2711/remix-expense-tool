@@ -20,15 +20,9 @@ function ExpensesHeader() {
         </ul>
       </nav>
       <nav id="cta-nav">
-        {userId ? (
-          <Form method="post" action="/logout" id="logout-form">
-            <button className="cta-alt">Logout</button>
-          </Form>
-        ) : (
-          <Link to="/auth" className="cta">
-            Login
-          </Link>
-        )}
+        <Form method="post" action="logout">
+          <button className="cta">Logout</button>
+        </Form>
       </nav>
     </header>
   );

@@ -8,7 +8,11 @@ import {
   Link,
   useRouteError,
 } from '@remix-run/react';
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from '@remix-run/node';
 import MainHeader from '~/components/navigation/MainHeader';
 import ExpensesHeader from './components/navigation/ExpensesHeader';
 
@@ -34,8 +38,11 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const meta: MetaFunction = () => {
+  return [{ title: 'Expense Tracker' }];
+};
+
 export function Document({
-  title,
   children,
   isExpensesRoute,
 }: {
@@ -50,7 +57,6 @@ export function Document({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <title>{title}</title>
       </head>
       <body>
         {isExpensesRoute ? <ExpensesHeader /> : <MainHeader />}
@@ -64,7 +70,6 @@ export function Document({
 
 export function Layout({
   children,
-  title,
 }: {
   children: React.ReactNode;
   title: string;
@@ -72,11 +77,7 @@ export function Layout({
   const location = useLocation();
   const isExpensesRoute = location.pathname.startsWith('/expenses');
 
-  return (
-    <Document isExpensesRoute={isExpensesRoute} title={title}>
-      {children}
-    </Document>
-  );
+  return <Document isExpensesRoute={isExpensesRoute}>{children}</Document>;
 }
 
 export function ErrorBoundary() {
