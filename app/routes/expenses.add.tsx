@@ -5,6 +5,7 @@ import { useNavigate } from '@remix-run/react';
 import { addExpense } from '~/data/expenses.server';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { validateExpenseInput } from '~/data/validation.server';
+import { requireUserSession } from '~/data/auth.server';
 
 export default function ExpensesAdd() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function ExpensesAdd() {
 
 // for any non GET request on this route
 export async function action({ request }: ActionFunctionArgs) {
+  const userId = await requireUserSession(request);
   const formData = await request.formData();
   const expenseData = {
     title: formData.get('title')?.toString() || '',
@@ -36,6 +38,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return error;
   }
 
-  await addExpense(expenseData);
+  await addExpense(expenseData, userId);
   return redirect('..');
 }

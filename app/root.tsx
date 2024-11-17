@@ -8,13 +8,14 @@ import {
   Link,
   useRouteError,
 } from '@remix-run/react';
-import type { LinksFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import MainHeader from '~/components/navigation/MainHeader';
 import ExpensesHeader from './components/navigation/ExpensesHeader';
 
 // import './tailwind.css';
 import sharedStyles from '~/styles/shared.css?url';
 import Error from './components/util/Error';
+import { getUserFromSession } from './data/auth.server';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -78,34 +79,22 @@ export function Layout({
   );
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
+  const error = useRouteError() as Error;
   return (
     <main>
       <Error title="An error occurred!">
-        <p>{error?.message || 'Something went wrong!'}</p>
-        <p>
-          Back to <Link to="/">safety!</Link>
-        </p>
+        {error.message || 'Something went wrong!'}
       </Error>
+      <p className="text-center">
+        Back to <Link to="/">safety!</Link>
+      </p>
     </main>
   );
 }
 
-export function CatchBoundary() {
-  const caughtResponse = useRouteError() as {
-    statusText: string;
-    data?: { message: string };
-  };
-  return (
-    <main>
-      <Error title={caughtResponse.statusText}>
-        <p>{caughtResponse.data?.message || 'Something went wrong!'}</p>
-        <p>
-          Back to <Link to="/">safety!</Link>
-        </p>
-      </Error>
-    </main>
-  );
+export function loader({ request }: LoaderFunctionArgs) {
+  return getUserFromSession(request);
 }
 
 export default function App() {

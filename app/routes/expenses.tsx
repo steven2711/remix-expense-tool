@@ -1,11 +1,13 @@
 // protected route
 import { Link, Outlet, useLoaderData } from '@remix-run/react';
-import type { LinksFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import ExpensesList from '~/components/expenses/ExpensesList';
 import expensesStyles from '~/styles/expenses.css?url';
 import { FaPlus, FaDownload } from 'react-icons/fa';
 import { getExpenses } from '~/data/expenses.server';
 import type { Expense } from '~/types/types';
+import { requireUserSession } from '~/data/auth.server';
 
 export const links: LinksFunction = () => [
   {
@@ -47,7 +49,8 @@ export default function ExpensesLayout() {
   );
 }
 
-export async function loader() {
-  const expenses = await getExpenses();
-  return expenses;
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await requireUserSession(request);
+  const expenses = await getExpenses(userId);
+  return json(expenses);
 }

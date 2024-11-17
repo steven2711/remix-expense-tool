@@ -1,5 +1,7 @@
-import { ActionFunctionArgs, LinksFunction } from '@remix-run/node';
+import { ActionFunctionArgs, LinksFunction, redirect } from '@remix-run/node';
 import AuthForm from '~/components/auth/AuthForm';
+import { login, signup } from '~/data/auth.server';
+import { validateCredentials } from '~/data/validation.server';
 import authStyles from '~/styles/auth.css?url';
 
 export const links: LinksFunction = () => [
@@ -21,10 +23,28 @@ export async function action({ request }: ActionFunctionArgs) {
   const credentials = Object.fromEntries(formData);
 
   // validate credentials
+  try {
+    validateCredentials(credentials);
+  } catch (error) {
+    return error;
+  }
 
-  if (authMode === 'login') {
-    // login user
-  } else {
-    // create user
+  try {
+    if (authMode === 'login') {
+      return await login({
+        email: credentials.email as string,
+        password: credentials.password as string,
+      });
+    } else {
+      return await signup({
+        email: credentials.email as string,
+        password: credentials.password as string,
+      });
+    }
+  } catch (error) {
+    if (error.status === 422) {
+      return { credentials: error.message };
+    }
+    return error;
   }
 }

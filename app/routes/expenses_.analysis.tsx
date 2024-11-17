@@ -2,10 +2,11 @@
 import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
 import Chart from '~/components/expenses/Chart';
 import expensesStyles from '~/styles/expenses.css?url';
-import type { LinksFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { json, useLoaderData, useRouteError } from '@remix-run/react';
 import { getExpenses } from '~/data/expenses.server';
 import Error from '~/components/util/Error';
+import { requireUserSession } from '~/data/auth.server';
 
 export const links: LinksFunction = () => [
   {
@@ -24,8 +25,9 @@ export default function ExpensesAnalysisPage() {
   );
 }
 
-export async function loader() {
-  const expenses = await getExpenses();
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userId = await requireUserSession(request);
+  const expenses = await getExpenses(userId);
 
   if (!expenses || expenses.length === 0) {
     throw json(
