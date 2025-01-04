@@ -2,8 +2,6 @@
 
 A modern expense tracking application built with Remix, React, and TypeScript. Manage your personal or business expenses with an intuitive interface, detailed analytics, and secure user authentication.
 
-![Expense Management](public/images/expenses-management.jpg)
-
 ## Features
 
 - 🔐 **Secure Authentication**: User registration and login with encrypted password storage
