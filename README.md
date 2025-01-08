@@ -1,13 +1,12 @@
 # RemixExpenses
 
-A modern expense tracking application built with Remix, React, and TypeScript. Manage your personal or business expenses with an intuitive interface, detailed analytics, and secure user authentication.
+A modern expense tracking application built with Remix, React, and TypeScript. Manage expenses with an intuitive interface, analytics, and secure user authentication. Built as part of a learning project for Remix.
 
 ## Features
 
 - 🔐 **Secure Authentication**: User registration and login with encrypted password storage
 - 💰 **Expense Management**: Create, edit, and delete expense entries
 - 📊 **Visual Analytics**: View expense trends with interactive charts and statistics
-- 📱 **Responsive Design**: Fully responsive interface that works on desktop and mobile
 - 🔄 **Real-time Updates**: Instant UI updates using Remix's data mutations
 - 📤 **Data Export**: Export expense data in raw format
 
@@ -110,6 +109,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Database powered by [Prisma](https://www.prisma.io/) and MongoDB
 - Icons from [React Icons](https://react-icons.github.io/react-icons/)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)
+
+## TODOs
+
+- Fix responsive issues
+- Add tests
 
 ## Requirements
 
